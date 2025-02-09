@@ -3,16 +3,12 @@
 [![Package Version](https://img.shields.io/hexpm/v/gloop)](https://hex.pm/packages/gloop)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/gloop/)
 
-```sh
-gleam add gloop@1
-```
-```gleam
-import gloop
+Stack-safe, non-UI blocking "While" and "do while" loops in Gleam to reduce the mental burden caused by recursion
 
-pub fn main() {
-  // TODO: An example of the project in use
-}
+```sh
+gleam add gloop
 ```
+Check the test folder for an example on how to use the while loop instead of using recursion
 
 Further documentation can be found at <https://hexdocs.pm/gloop>.
 
