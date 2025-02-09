@@ -8,7 +8,7 @@ Stack-safe, non-UI blocking "while" and "do while" loops in Gleam to reduce the 
 ```sh
 gleam add gloop
 ```
-Check the test folder for an example on how to use the while loop instead of using recursion
+Check the test folder for an example on how to use the while loop.
 
 Further documentation can be found at <https://hexdocs.pm/gloop>.
 
