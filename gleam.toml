@@ -6,7 +6,7 @@ version = "1.1.0"
 #
 description = "Stack-safe `while do` and `do while` loops in Gleam"
 licences = ["Apache-2.0"]
-# repository = { type = "github", user = "", repo = "" }
+repository = { type = "github", user = "DriesDhooghe", repo = "gloop" }
 # links = [{ title = "Website", href = "" }]
 #
 # For a full reference of all the available options, you can have a look at
