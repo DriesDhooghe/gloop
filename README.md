@@ -3,7 +3,7 @@
 [![Package Version](https://img.shields.io/hexpm/v/gloop)](https://hex.pm/packages/gloop)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/gloop/)
 
-Stack-safe "while" and "do while" loops in Gleam to reduce the mental burden caused by recursion.
+Stack-safe `while` and `do while` loops in Gleam to reduce the mental burden caused by recursion.
 
 ```sh
 gleam add gloop
