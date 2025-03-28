@@ -58,7 +58,6 @@ pub fn for(
     True -> {
       let intermediate_state = code_to_run(state)
       let new_state = post_run_state(intermediate_state)
-      //add continue and break here before continuing
       for(new_state, pre_run_condition, code_to_run, post_run_state)
     }
   }
