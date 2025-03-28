@@ -45,8 +45,8 @@ pub fn do_while(
 /// a new state is generated that is used for the next iteration.
 /// If the condition is false then the code returns the final state and stops.
 /// Just as the other functions, this for loop is stack-safe.
-/// NOTE: There should not be a great need for `for` loops in a functional language. Use Map, reduce and folds instead.
-/// This for loop is here to be able to translate algorithms from C to Gleam.
+/// NOTE: There should not be a great need for `for` loops in a functional language.
+/// Use Map, reduce and folds instead.
 pub fn for(
   state state: a,
   pre_run_condition pre_run_condition: fn(a) -> Bool,
@@ -63,4 +63,3 @@ pub fn for(
     }
   }
 }
-///implement break and continue. They can be anywhere inside the loop body {}

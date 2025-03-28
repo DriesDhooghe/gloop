@@ -1,12 +1,12 @@
-//// To test and show how to use while and for, I have added 3 examples.
-//// 1. Traditional implementation of the well-known factorial function to allow you to focus on how
-//// to use while (see factorial_using_while).
+//// To test and show how to use `while` and `for`, I have added 3 examples.
+//// 1. Traditional implementation of the well-known factorial function to allow
+//// you to focus on how to use while (see factorial_using_while).
 //// 2. Factorial function but this time using a for loop (see factorial_using_for)
 //// 3. For the third example, I used the still unproven Collatz conjecture
 //// (https://science.howstuffworks.com/math-concepts/collatz-conjecture.htm)
-//// to performance-test the while function and to show you how to use the while function
-//// in a more complex realistic situation. On my computer this Collatz sample code on a ridiculously
-//// large integer runs through 68140 loops in about 112 msecs.
+//// to performance-test the while function and to show you how to use the while
+//// function in a more complex realistic situation. On my computer this Collatz
+//// sample code on a ridiculously large integer runs through 68140 loops in about 112 msecs.
 
 import gleam/int
 import gleam/io
@@ -18,21 +18,8 @@ pub type ErrorCheck {
   ZeroValue
 }
 
-pub type TerminationStatus {
-  None
-  //continue current iteration and continue the loop
-  Break
-  //stop the loop immediately
-  Continue
-  //skip current iteration but continue loop
-}
-
 pub type FactorialState {
-  FactorialState(
-    accumulator: Int,
-    i: Int,
-    termination_status: TerminationStatus,
-  )
+  FactorialState(accumulator: Int, i: Int)
 }
 
 pub fn factorial_using_while_with_termination(
@@ -41,8 +28,7 @@ pub fn factorial_using_while_with_termination(
   //Error checking, don't run if intial value is negative
   let n_is_neg = n < 0
   let n_is_0 = n == 0
-  let initial_state =
-    FactorialState(accumulator: 1, i: n, termination_status: None)
+  let initial_state = FactorialState(accumulator: 1, i: n)
   case n_is_neg {
     True -> Error(NegativeValue)
     False ->
@@ -58,14 +44,9 @@ pub fn factorial_using_while_with_termination(
               code_to_run: fn(state: FactorialState) -> FactorialState {
                 let accumulator = state.accumulator
                 let i = state.i
-                let termination_status = case i {
-                  3 -> Break
-                  2 -> Continue
-                  _ -> None
-                }
-
-                FactorialState(accumulator * i, i - 1, termination_status)
-                //note how in a while loop, the counter is updated in the code block. This is in contrast to the for loop below.
+                FactorialState(accumulator * i, i - 1)
+                //Note how in a while loop, the counter is updated in the code block.
+                //This is in contrast to the for loop below.
               },
             ),
           )
@@ -73,9 +54,10 @@ pub fn factorial_using_while_with_termination(
   }
 }
 
-/// This function calculates the factorial using iteration and a while loop (iterator i and an accumulator to
-/// hold the calculated value in between iterations of the while loop).
-/// In an imperative language like C, the function factiorial using a while loop would be implemented as follows:
+/// This function calculates the factorial using iteration and a while loop (iterator i
+/// and an accumulator to hold the calculated value in between iterations of the while loop).
+/// In an imperative language like C, the function factiorial using a while loop would be
+/// implemented as follows:
 ///
 /// int factorial(int n) {
 ///    if (n < 0) { return -1; } //error check, return -1 if there is an error
@@ -84,21 +66,25 @@ pub fn factorial_using_while_with_termination(
 ///    return acc;
 /// }
 ///
-///   n > 1 is the condition to check prior to running the code block. If the condition is false then the loop stops and the function moves to returning acc.
-///   { acc = acc * n; n = n - 1 } is the code to execute if the condition is true (in this case multiply the value of acc with n, store the result in acc,
-///   decrement n and start the next iteration of the loop.
-///   NOTE: in a while loop, the counter n is updated in the code block in C. This is in contrast to the for loop in C (see further).
+///   - n > 1 is the condition to check prior to running the code block. If the condition is false
+///   then the loop stops and the function moves to returning acc.
+///   - { acc = acc * n; n = n - 1 } is the code to execute if the condition is true (in this case
+///   multiply the value of acc with n, store the result in acc, decrement n and start the next
+///   iteration of the loop.
+///   NOTE: in a while loop, the counter n is updated in the code block in C.
+///   This is in contrast to the for loop in C (see further down).
 ///
-/// The state in this snippet is the variable acc and the parameter n. In functional programming languages, variables can't be changed so we
-/// create a FactorialState type (see above) that contains both acc and n and we create a new state for each iteration of the while loop.
-/// The equivalent factorial function to the C code above using gloop.while would be:
+/// The state in this snippet is represented through the variable acc and the parameter n. In
+/// functional programming languages, variables can't be changed so we create a FactorialState type
+/// that contains both acc and n; we create a new state for each iteration of the while loop and pass
+/// the state around.
+/// The equivalent factorial function using gloop.while in Gleam would be:
 ///
 pub fn factorial_using_while(n: Int) -> Result(FactorialState, ErrorCheck) {
   //Error checking, don't run if intial value is negative
   let n_is_neg = n < 0
   let n_is_0 = n == 0
-  let initial_state =
-    FactorialState(accumulator: 1, i: n, termination_status: None)
+  let initial_state = FactorialState(accumulator: 1, i: n)
   case n_is_neg {
     True -> Error(NegativeValue)
     False ->
@@ -114,14 +100,9 @@ pub fn factorial_using_while(n: Int) -> Result(FactorialState, ErrorCheck) {
               code_to_run: fn(state: FactorialState) -> FactorialState {
                 let accumulator = state.accumulator
                 let i = state.i
-                let loop_status = case i {
-                  3 -> Break
-                  2 -> Continue
-                  _ -> None
-                }
-
-                FactorialState(accumulator * i, i - 1, loop_status)
-                //note how in a while loop, the counter is updated in the code block. This is in contrast to the for loop below.
+                FactorialState(accumulator * i, i - 1)
+                //Note how in a while loop, the counter i is updated in the code block.
+                //This is in contrast to the for loop below.
               },
             ),
           )
@@ -129,9 +110,10 @@ pub fn factorial_using_while(n: Int) -> Result(FactorialState, ErrorCheck) {
   }
 }
 
-/// The next function calculates the factorial using iteration and a for loop (iterator i and an accumulator to
-/// hold the calculated value in between loops of for).
-/// E.g. in an imperative language like C, the function factorial using a for loop would be implemented as follows:
+/// The next function calculates the factorial using iteration and a for loop (iterator i
+/// and an accumulator to hold the calculated value in between loops of for).
+/// E.g. in an imperative language like C, the function factorial using a for loop would
+/// be implemented like this:
 ///
 /// int factorial(int n) {
 ///    if (n < 0) { return -1; } //error check, return -1 if there is an error
@@ -145,16 +127,16 @@ pub fn factorial_using_while(n: Int) -> Result(FactorialState, ErrorCheck) {
 ///   { acc = acc * i; } is the code to execute if the condition is true (in this case multiply the value of acc with i and store in acc)
 ///   i = i + 1 is what needs to happen to the variable i after the code has executed (in this case increase i by 1 and store in i)
 ///
-/// The state in this snippet is the variable acc and the variable i. In functional programming languages, variables
-/// can't be changed so we create a FactorialState type that contains both acc and i and create a new state for each iteration of the for loop.
-/// The equivalent factorial function using gloop.for would be:
+/// As before, the state in this snippet is represented through the variable acc and the parameter n.
+/// And as before use use the FactorialState type to represent the state we want to pass from iteration
+/// to iteration of the loop.
+/// The equivalent factorial function using gloop.for in Gleam would be:
 ///
 pub fn factorial_using_for(n: Int) -> Result(FactorialState, ErrorCheck) {
   //Error checking, don't run if intial value is negative
   let n_is_neg = n < 0
   let n_is_0 = n == 0
-  let initial_state =
-    FactorialState(accumulator: 1, i: 1, termination_status: None)
+  let initial_state = FactorialState(accumulator: 1, i: 1)
   case n_is_neg {
     True -> Error(NegativeValue)
     False ->
@@ -169,14 +151,15 @@ pub fn factorial_using_for(n: Int) -> Result(FactorialState, ErrorCheck) {
             code_to_run: fn(state: FactorialState) -> FactorialState {
               let accumulator = state.accumulator
               let i = state.i
-              let intermediate_state = FactorialState(accumulator * i, i, None)
-              //Note how in a for loop, the counter is NOT updated in the code block like it is in the while function
-              //although we easily could have. This follows how the for loop works in C.
+              let intermediate_state = FactorialState(accumulator * i, i)
+              //Note how in a for loop, the counter is NOT updated in the code block like
+              //it is in the while function although we easily could have done that here as well.
+              //This follows how the for loop works in C.
             },
             post_run_state: fn(intermediate_state: FactorialState) -> FactorialState {
               let i = intermediate_state.i
               let accumulator = intermediate_state.accumulator
-              let new_state = FactorialState(accumulator, i + 1, None)
+              let new_state = FactorialState(accumulator, i + 1)
               //We update the counter separately from the code block like in C.
             },
           ))
@@ -189,8 +172,8 @@ pub type CollatzState {
 }
 
 /// Returns the number of iterations necessary for the Collatz function starting at start_value
-/// to reach 1. We create an initial_state that gets threaded through the iterations as a new CollatzState
-/// in the while loop and is tested against the exit criterium (state.n != 1).
+/// to reach 1. We create an initial_state that gets threaded through the iterations as a new
+/// CollatzState in the while loop and is tested against the exit criterium (state.n != 1).
 pub fn collatz(start_value: Int) -> Result(CollatzState, ErrorCheck) {
   //Error checking, don't run if intial value is negative or zero
   let n_is_neg = start_value < 0
@@ -225,26 +208,32 @@ pub fn collatz(start_value: Int) -> Result(CollatzState, ErrorCheck) {
 
 pub fn main() {
   //Example 1 factorial using while
-  io.debug(factorial_using_while(100))
-  io.debug(factorial_using_while(-1))
-  io.debug(factorial_using_while(0))
-  io.debug(factorial_using_while(1))
+
+  echo "FACTORIAL USING WHILE"
+  echo factorial_using_while(100)
+  echo factorial_using_while(-1)
+  echo factorial_using_while(0)
+  echo factorial_using_while(1)
 
   //Example 2 factorial using for
-  io.debug(factorial_using_for(100))
-  io.debug(factorial_using_for(-1))
-  io.debug(factorial_using_for(0))
-  io.debug(factorial_using_for(1))
+
+  echo "FACTORIAL USING FOR"
+  echo factorial_using_for(100)
+  echo factorial_using_for(-1)
+  echo factorial_using_for(0)
+  echo factorial_using_for(1)
 
   //Example 3 Collatz
+
+  echo "COLLATZ"
   let large_integer =
     989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647_989_345_275_647
 
   let start_time = timestamps.new() |> timestamps.value_of
-  io.debug(collatz(large_integer))
+  echo collatz(large_integer)
   let end_time = timestamps.new() |> timestamps.value_of
-  io.debug(end_time - start_time)
-  io.debug(collatz(-1))
-  io.debug(collatz(0))
-  io.debug(collatz(1))
+  echo end_time - start_time
+  echo collatz(-1)
+  echo collatz(0)
+  echo collatz(1)
 }
